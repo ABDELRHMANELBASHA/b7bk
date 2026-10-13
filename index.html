@@ -69,6 +69,11 @@
         /* Smooth Reveal Animation */
         .fade-in-panel {
             animation: fadeIn 0.4s ease-out forwards;
+            display: block !important;
+        }
+
+        .hidden-panel {
+            display: none !important;
         }
 
         @keyframes fadeIn {
@@ -180,4 +185,124 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-sm text-rose-100">وحشتني أوي</h3>
-                        <p class="text-[11px] text-rose-300/60 mt-0.5">مح
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">محتاجة حنية واهتمام</p>
+                    </div>
+                </div>
+
+                <!-- Mood 4 -->
+                <div data-mood="happy" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-400/20 flex items-center justify-center text-2xl">
+                        ✨
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">مبسوطة ورايقة</h3>
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">طاقة فرح وحب متواصلة</p>
+                    </div>
+                </div>
+
+                <!-- Mood 5 -->
+                <div data-mood="confused" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-400/20 flex items-center justify-center text-2xl">
+                        🤯
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">مشتتة ومحتارة</h3>
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">محتاجة أمان وهدوء وفصلان</p>
+                    </div>
+                </div>
+
+                <!-- Mood 6 -->
+                <div data-mood="laugh" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-orange-500/15 border border-orange-400/20 flex items-center justify-center text-2xl">
+                        😂
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">عايزة أضحك وأفرفش</h3>
+                        <p class="text-[10px] sm:text-[11px] text-rose-300/60 mt-0.5">جرعة ضحك وهزار مخصص</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mood Response Panel (Initially Hidden) -->
+            <div id="responsePanel" class="hidden-panel glass-card p-5 sm:p-7 border-2 border-rose-500/30 space-y-5">
+                
+                <!-- Panel Top Header -->
+                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span id="resIcon" class="text-3xl sm:text-4xl">😴</span>
+                        <div>
+                            <h3 id="resTitle" class="text-base sm:text-lg font-black text-amber-200">عنوان المود</h3>
+                            <p id="resTagline" class="text-xs text-rose-300/70">تأكيد الرعاية والدفء</p>
+                        </div>
+                    </div>
+
+                    <button id="nextMsgBtn" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/30 text-rose-200 text-xs font-bold transition-all flex items-center gap-1 shadow-sm active:scale-95">
+                        <span>🔄</span>
+                        <span>رسالة تانية</span>
+                    </button>
+                </div>
+
+                <!-- Heart Message -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-rose-300 flex items-center gap-1">
+                            <span>💌</span>
+                            <span>كلامي ليكي يا أماني:</span>
+                        </span>
+                        <span id="msgIndexTag" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">1 من 3</span>
+                    </div>
+                    <p id="resMessage" class="text-sm sm:text-base text-rose-50 leading-relaxed font-semibold bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-rose-500/15 shadow-inner">
+                        الرسالة تظهر هنا...
+                    </p>
+                </div>
+
+                <!-- Action Box & Direct Buttons -->
+                <div class="bg-gradient-to-r from-rose-950/70 to-purple-950/70 p-4 rounded-2xl border border-rose-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="space-y-0.5 text-center sm:text-right">
+                        <div class="text-xs font-bold text-amber-300 flex items-center justify-center sm:justify-start gap-1">
+                            <span>👑</span>
+                            <span>وعدي ليكي دلوقتي:</span>
+                        </div>
+                        <div id="resAction" class="text-xs sm:text-sm text-rose-100 font-bold">
+                            الخطوة العملية المقترحة
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <a id="waLink" href="#" target="_blank" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg active:scale-95 transition-all">
+                            <span>💬</span>
+                            <span>أبعتيلي على الواتساب فوراً</span>
+                        </a>
+                        <a href="https://instagram.com/iamabdelrhman_" target="_blank" class="px-3 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-lg active:scale-95 transition-all">
+                            <span>📷</span>
+                            <span>إنستجرام</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Instant Hug Button -->
+            <div class="text-center pt-2">
+                <button id="hugBtn" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 hover:brightness-110 active:scale-95 text-white font-black text-sm shadow-xl shadow-rose-600/30 transition-all border border-pink-300/30 inline-flex items-center gap-2">
+                    <span class="text-lg">🫂</span>
+                    <span>حضن كبير ورشة قلوب لأمونتي</span>
+                    <span class="text-lg">✨</span>
+                </button>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-xs text-rose-300/40 border-t border-white/5 pt-4 font-medium">
+            متصممة بكل الحب والرعاية الأبدية لأغلى أماني في الدنيا كلها 💕
+        </footer>
+
+    </div>
+
+    <!-- JavaScript Engine -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const PHONE_NUMBER = '20104436556
