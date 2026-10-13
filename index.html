@@ -1,0 +1,642 @@
+html_v6 = """<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أماني 👑 | ركن الروقان والرعاية</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        * {
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b0713;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background 0.8s ease;
+        }
+
+        /* Ambient Glow Backgrounds */
+        .glow-bg {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.45;
+            transition: all 1s ease;
+        }
+
+        /* Custom Glass Card Styling */
+        .glass-card {
+            background: rgba(23, 15, 38, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.25rem;
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+            cursor: pointer;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(244, 63, 94, 0.4);
+            box-shadow: 0 12px 30px rgba(244, 63, 94, 0.15);
+        }
+
+        .glass-card:active {
+            transform: scale(0.98);
+        }
+
+        .glass-card-selected {
+            background: rgba(45, 24, 77, 0.85) !important;
+            border-color: #fb7185 !important;
+            box-shadow: 0 0 25px rgba(244, 63, 94, 0.35) !important;
+        }
+
+        /* Smooth Reveal Animation */
+        .fade-in-panel {
+            animation: fadeIn 0.4s ease-out forwards;
+            display: block !important;
+        }
+
+        .hidden-panel {
+            display: none !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Title Gradient */
+        .title-gradient {
+            background: linear-gradient(135deg, #fda4af 0%, #fb7185 50%, #f43f5e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Pulse Heart */
+        @keyframes heartPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .pulse-icon {
+            animation: heartPulse 1.8s infinite ease-in-out;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0713; }
+        ::-webkit-scrollbar-thumb { background: #fb7185; border-radius: 10px; }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between min-h-screen">
+
+    <!-- Canvas Background for Heart Effects -->
+    <canvas id="heartCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Glow Orbs -->
+    <div id="glow1" class="glow-bg top-[-50px] right-[-50px] w-80 h-80 bg-rose-600"></div>
+    <div id="glow2" class="glow-bg bottom-[-50px] left-[-50px] w-80 h-80 bg-purple-700"></div>
+
+    <div class="relative z-10 max-w-3xl mx-auto w-full px-4 py-6 sm:py-8 flex-grow flex flex-col justify-between">
+
+        <!-- Top Navigation -->
+        <header class="glass-card p-4 flex items-center justify-between mb-8 shadow-xl">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-500 flex items-center justify-center text-2xl shadow-lg pulse-icon">
+                    👑
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg text-rose-100">ركن أماني المخصص 🤍</h1>
+                    <p class="text-xs text-rose-300/80">علشان قلبك يفضل رايق ومستريح دايماً</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button id="rainBtn" class="px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-rose-500/20 text-xs font-bold text-rose-200 transition-all flex items-center gap-1.5 shadow-md">
+                    <span id="rainIcon">🌧️</span>
+                    <span id="rainText" class="hidden sm:inline">صوت مطر</span>
+                </button>
+                <a href="https://instagram.com/iamabdelrhman_" target="_blank" class="px-3 py-2 rounded-xl bg-pink-600/30 hover:bg-pink-600/50 border border-pink-400/30 text-xs font-bold text-pink-200 transition-all flex items-center gap-1">
+                    <span>📷</span>
+                    <span class="hidden sm:inline">إنستجرام</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="space-y-6">
+
+            <!-- Title Header -->
+            <div class="text-center space-y-2">
+                <span class="inline-block px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-bold">
+                    ✨ مساحتك الخاصة مع عبد الرحمن
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black title-gradient drop-shadow-md">
+                    حاسّة بإيه دلوقتي يا أماني؟ 👑
+                </h2>
+                <p class="text-xs sm:text-sm text-rose-200/70 max-w-md mx-auto leading-relaxed">
+                    اختاري المود اللي حاسة بيه.. وكل كلمة هتقرئيها هنا طالعة من قلبي ليكي مخصوص عشان أريحك وأفرحك 💕
+                </p>
+            </div>
+
+            <!-- 6 Mood Buttons Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+
+                <!-- Mood 1 -->
+                <div data-mood="exhausted" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-500/15 border border-indigo-400/20 flex items-center justify-center text-2xl">
+                        😴
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">تعبانة ومفصولة</h3>
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">إرهاق اليوم والتفكير</p>
+                    </div>
+                </div>
+
+                <!-- Mood 2 -->
+                <div data-mood="annoyed" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-500/15 border border-rose-400/20 flex items-center justify-center text-2xl">
+                        😤
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">زعلانة ومضايقة مني</h3>
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">عايزة اعتذار ودلع خاص</p>
+                    </div>
+                </div>
+
+                <!-- Mood 3 -->
+                <div data-mood="miss_you" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-fuchsia-500/15 border border-fuchsia-400/20 flex items-center justify-center text-2xl">
+                        🥺
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">وحشتني أوي</h3>
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">محتاجة حنية واهتمام</p>
+                    </div>
+                </div>
+
+                <!-- Mood 4 -->
+                <div data-mood="happy" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-400/20 flex items-center justify-center text-2xl">
+                        ✨
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">مبسوطة ورايقة</h3>
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">طاقة فرح وحب متواصلة</p>
+                    </div>
+                </div>
+
+                <!-- Mood 5 -->
+                <div data-mood="confused" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-400/20 flex items-center justify-center text-2xl">
+                        🤯
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">مشتتة ومحتارة</h3>
+                        <p class="text-[11px] text-rose-300/60 mt-0.5">محتاجة أمان وهدوء وفصلان</p>
+                    </div>
+                </div>
+
+                <!-- Mood 6 -->
+                <div data-mood="laugh" class="mood-card glass-card p-4 text-center flex flex-col items-center gap-2.5">
+                    <div class="w-12 h-12 rounded-2xl bg-orange-500/15 border border-orange-400/20 flex items-center justify-center text-2xl">
+                        😂
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-rose-100">عايزة أضحك وأفرفش</h3>
+                        <p class="text-[10px] sm:text-[11px] text-rose-300/60 mt-0.5">جرعة ضحك وهزار مخصص</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Mood Response Panel (Initially Hidden) -->
+            <div id="responsePanel" class="hidden-panel glass-card p-5 sm:p-7 border-2 border-rose-500/30 space-y-5">
+                
+                <!-- Panel Top Header -->
+                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <div class="flex items-center gap-3">
+                        <span id="resIcon" class="text-3xl sm:text-4xl">😴</span>
+                        <div>
+                            <h3 id="resTitle" class="text-base sm:text-lg font-black text-amber-200">عنوان المود</h3>
+                            <p id="resTagline" class="text-xs text-rose-300/70">تأكيد الرعاية والدفء</p>
+                        </div>
+                    </div>
+
+                    <button id="nextMsgBtn" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/30 text-rose-200 text-xs font-bold transition-all flex items-center gap-1 shadow-sm active:scale-95">
+                        <span>🔄</span>
+                        <span>رسالة تانية</span>
+                    </button>
+                </div>
+
+                <!-- Heart Message -->
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-rose-300 flex items-center gap-1">
+                            <span>💌</span>
+                            <span>كلامي ليكي يا أماني:</span>
+                        </span>
+                        <span id="msgIndexTag" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30">1 من 3</span>
+                    </div>
+                    <p id="resMessage" class="text-sm sm:text-base text-rose-50 leading-relaxed font-semibold bg-slate-950/70 p-4 sm:p-5 rounded-2xl border border-rose-500/15 shadow-inner">
+                        الرسالة تظهر هنا...
+                    </p>
+                </div>
+
+                <!-- Action Box & Direct Buttons -->
+                <div class="bg-gradient-to-r from-rose-950/70 to-purple-950/70 p-4 rounded-2xl border border-rose-500/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="space-y-0.5 text-center sm:text-right">
+                        <div class="text-xs font-bold text-amber-300 flex items-center justify-center sm:justify-start gap-1">
+                            <span>👑</span>
+                            <span>وعدي ليكي دلوقتي:</span>
+                        </div>
+                        <div id="resAction" class="text-xs sm:text-sm text-rose-100 font-bold">
+                            الخطوة العملية المقترحة
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <a id="waLink" href="#" target="_blank" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg active:scale-95 transition-all">
+                            <span>💬</span>
+                            <span>أبعتيلي على الواتساب فوراً</span>
+                        </a>
+                        <a href="https://instagram.com/iamabdelrhman_" target="_blank" class="px-3 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-lg active:scale-95 transition-all">
+                            <span>📷</span>
+                            <span>إنستجرام</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Instant Hug Button -->
+            <div class="text-center pt-2">
+                <button id="hugBtn" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-pink-600 to-amber-500 hover:brightness-110 active:scale-95 text-white font-black text-sm shadow-xl shadow-rose-600/30 transition-all border border-pink-300/30 inline-flex items-center gap-2">
+                    <span class="text-lg">🫂</span>
+                    <span>حضن كبير ورشة قلوب لأمونتي</span>
+                    <span class="text-lg">✨</span>
+                </button>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-xs text-rose-300/40 border-t border-white/5 pt-4 font-medium">
+            متصممة بكل الحب والرعاية الأبدية لأغلى أماني في الدنيا كلها 💕
+        </footer>
+
+    </div>
+
+    <!-- JavaScript Engine -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const PHONE_NUMBER = '201044365565';
+
+            /* Canvas Hearts Animation */
+            const canvas = document.getElementById('heartCanvas');
+            const ctx = canvas.getContext('2d');
+            let hearts = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Heart {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + Math.random() * 40;
+                    this.size = Math.random() * 10 + 6;
+                    this.speedY = Math.random() * 0.8 + 0.3;
+                    this.speedX = (Math.random() - 0.5) * 0.4;
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                }
+                update() {
+                    this.y -= this.speedY;
+                    this.x += this.speedX;
+                    if (this.y < -20) this.reset();
+                }
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.fillStyle = `rgba(251, 113, 133, ${this.opacity})`;
+                    ctx.beginPath();
+                    const h = this.size * 0.3;
+                    ctx.moveTo(0, h);
+                    ctx.bezierCurveTo(0, 0, -this.size / 2, 0, -this.size / 2, h);
+                    ctx.bezierCurveTo(-this.size / 2, (this.size + h) / 2, 0, this.size, 0, this.size);
+                    ctx.bezierCurveTo(0, this.size, this.size / 2, (this.size + h) / 2, this.size / 2, h);
+                    ctx.bezierCurveTo(this.size / 2, 0, 0, 0, 0, h);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 25; i++) hearts.push(new Heart());
+
+            function animateHearts() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                hearts.forEach(h => { h.update(); h.draw(); });
+                requestAnimationFrame(animateHearts);
+            }
+            animateHearts();
+
+            /* Hug Burst Button */
+            document.getElementById('hugBtn').addEventListener('click', () => {
+                for (let i = 0; i < 25; i++) {
+                    const h = new Heart();
+                    h.x = window.innerWidth / 2 + (Math.random() - 0.5) * 200;
+                    h.y = window.innerHeight / 2 + (Math.random() - 0.5) * 150;
+                    h.size = Math.random() * 18 + 10;
+                    h.speedY = Math.random() * 2 + 1;
+                    hearts.push(h);
+                }
+            });
+
+            /* Ambient Rain Sound Synthesizer */
+            let audioCtx = null;
+            let rainSource = null;
+            let isRainPlaying = false;
+
+            document.getElementById('rainBtn').addEventListener('click', () => {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                if (isRainPlaying) {
+                    if (rainSource) rainSource.stop();
+                    isRainPlaying = false;
+                    document.getElementById('rainText').textContent = "صوت مطر";
+                    document.getElementById('rainBtn').classList.remove('bg-rose-900/60');
+                } else {
+                    const bufferSize = audioCtx.sampleRate * 2;
+                    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.01;
+
+                    rainSource = audioCtx.createBufferSource();
+                    rainSource.buffer = buffer;
+                    rainSource.loop = true;
+
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 800;
+
+                    rainSource.connect(filter);
+                    filter.connect(audioCtx.destination);
+                    rainSource.start();
+
+                    isRainPlaying = true;
+                    document.getElementById('rainText').textContent = "المطر شغال 🌧️";
+                    document.getElementById('rainBtn').classList.add('bg-rose-900/60');
+                }
+            });
+
+            /* Deeply Personal & Natural Content per Mood for Amani */
+            const moodsData = {
+                exhausted: {
+                    icon: '😴',
+                    title: 'تعبانة ومفصولة يا أمونتي ☕',
+                    tagline: 'سلامة قلبك وشيل الأفكار من دماغك خالص',
+                    glow1: 'bg-indigo-600',
+                    glow2: 'bg-purple-900',
+                    messages: [
+                        {
+                            msg: "عارف إن يومك كان تقيل واستهلك طاقتك يا أماني.. سلامة قلبك ورأسك من أي تعب أو إرهاق. ارمي كل حاجة من إيدك دلوقتي، وافتكري إن ليكي عبد الرحمن اللي مسؤوليته وشغله الشاغل إنه يريحك ويشيل عنك التفكير.",
+                            action: "دليفري أكل بتحبيه يوصلك فوراً + تفصلي أجهزة وتستريحي تماماً الليلة دي 🛌💕",
+                            waMsg: "أنا تعبانة ومفصولة جداً يا عبد الرحمن.. محتاجة إيدك الحنينة تريحني وتفصلني عن الدنيا 😴❤️"
+                        },
+                        {
+                            msg: "متضغطيش على نفسك خالص وأنتِ معايا يا أمونتي.. لو مش قادرة تتكلمي أو تفكري، ارمي كل حاجة على مكتفي ونامي وأنتِ مطمنة. راحتك عندي أهم من أي حاجة في الدنيا دي كلها.",
+                            action: "مشروب دافئ بتحبيه يوصلك + سهرة هادية بدون أي أسئلة يجهدك ☕✨",
+                            waMsg: "طاقتي خلصت ومش قادرة أفكر يا عبد الرحمن.. تعال شيل عني وروق عليا 🥺❤️"
+                        },
+                        {
+                            msg: "لو الدنيا كلها ضاغطة عليكي، فاكري دايماً إن قلبي هو بيتك الآمن اللي يقدر يستوعبك وأنتِ في قمة تعبك بدون أي مجاملة. افصلي الموبايل واستريحي يا حبيبتي.",
+                            action: "حضن دافئ يمسح كل ذرة تعب مرتي بيها النهارده 👑",
+                            waMsg: "تعبانة أوي ومحتاجة أحس إنك جنبي وأنا قافلة عينايا ومطمنة 😴🤍"
+                        }
+                    ]
+                },
+
+                annoyed: {
+                    icon: '😤',
+                    title: 'زعلانة ومضايقة مني يا أماني 🥺❤️',
+                    tagline: 'حقك عليا وزعلك أغلى حاجة عندي',
+                    glow1: 'bg-rose-600',
+                    glow2: 'bg-red-950',
+                    messages: [
+                        {
+                            msg: "قبل أي كلام يا أمونتي: حقك عليا ورأسك أبوسها قبل قلبك. مفيش أي حاجة في الدنيا تستاهل تخلي عينيكِ الجميلة دي تزعل مني لحظة واحدة. أنا معترف بزعلك وجاهز أراضيكي بأعلى قدر من الدلع.",
+                            action: "اعتذار رجالي راقي وخالي من أي حجج + خروجة وسهرة فاخرة تحكمي فيها أنتِ وبس 👑",
+                            waMsg: "أنا زعلانة ومضايقة منك يا عبد الرحمن.. تعال صالحني فوراً واعرف إزاي تراضيني 😤❤️"
+                        },
+                        {
+                            msg: "أنا مش هجادلك ولا هدافع عن نفسي يا أماني، لأن زعلك عندي معناه إن في حاجة قصرت فيها تجاه أميرتي. زعلك ده له هيبة بحترمها، ورضاكِ هو الهدف الوحيد اللي لازم أتحرك عشانه فوراً.",
+                            action: "هدية مفاجأة توصل لبايك فوراً + تنفيذي لكل شروطك الصارمة بالكامل 📝💕",
+                            waMsg: "عملت موقف زعلني يا عبد الرحمن.. ومستنية أشوف هتصالح قلبي ده إزاي 😤👑"
+                        },
+                        {
+                            msg: "عارف إن قلبك الطيب زعلان، وعارف إن دلالك عليا هو حقك الطبيعي يا أمونتي. أوعدك إني أتعلم وما أكررش حاجة تمس راحتك تاني أبداً. يرضيكي النكد وياخد هو كل المكان بس نرجع نبتسم سوا؟",
+                            action: "عزومة على أكلتك المفضلة + جلسة صلح استثنائية ونبدأ صفحة جديدة أنقى من الأول 🍷✨",
+                            waMsg: "حقك عليا دي مش هتكفي بلاش استسهال يا عبد الرحمن.. تعال صالحني بجد 😤💖"
+                        }
+                    ]
+                },
+
+                miss_you: {
+                    icon: '🥺',
+                    title: 'وحشتني أوي يا أمونتي 💖',
+                    tagline: 'أنتِ وحشاني بجمال لا تسعه السطور',
+                    glow1: 'bg-fuchsia-600',
+                    glow2: 'bg-purple-900',
+                    messages: [
+                        {
+                            msg: "وحشني صوتك وتفاصيلك الدقيقة اللي محدش غيري بيفهمها ولا بيحسها يا أمونتي. الشوق ليكي مش مجرد كلام، ده إحساس بيملأ يومي ويزود لهفتي عشان أكون جنبك وأسمع ضحكتكِ الساحرة عن قرب.",
+                            action: "مكالمة طويلة نتكلم فيها براحتنا بدون عجل + لقاء قريب جداً نشرب القهوة سوا ☕❤️",
+                            waMsg: "أنت وحشتني أوي يا عبد الرحمن ومعنديش صبر.. محتاجة أحس بقربك وحنيتك دلوقتي 🥺💕"
+                        },
+                        {
+                            msg: "لو تعرفي مكانتك عندي وإد إيه غيابك بيخلي الدنيا باهتة ومقلقة يا أماني، هتعرفي إن كلمة 'وحشتني' دي أقل بكتير من اللي جوة قلبي. أنتِ الاستثناء والأمان والوطن الدافئ اللي برتاح فيه.",
+                            action: "جلسة كلام وعاطفة خاصة جداً نفتح فيها قلوبنا ونفتكر أجمل ذكرياتنا سوا ✨👑",
+                            waMsg: "وحشتني بزيادة النهارده ومش عارفة أركز في حاجة يا عبد الرحمن.. اتصرف وتعال 🥺❤️"
+                        },
+                        {
+                            msg: "كل التفاصيل الصغيرة المفضلة عندي مرتبطة بيكي أنتِ وبس يا أمونتي. الشوق ليكي بيخليني أبتسم لما افتكر ضحكتك.. مستني اللحظة اللي أخدك فيها في حضني وأقولك قد إيه بحبك.",
+                            action: "تفريغ وقت كامل مخصوص ليكي أنتِ وبس بدون أي مشتتات خارجية 💌✨",
+                            waMsg: "محتاجة أسمع صوتك ويا ريت تبقي جنبي دلوقتي بالذات يا عبد الرحمن 🥺💖"
+                        }
+                    ]
+                },
+
+                happy: {
+                    icon: '✨',
+                    title: 'مبسوطة ورايقة يا أميرتي 👑',
+                    tagline: 'يا بخت الدنيا والنور بابتسامتكِ',
+                    glow1: 'bg-amber-500',
+                    glow2: 'bg-rose-500',
+                    messages: [
+                        {
+                            msg: "يا بخت الأيام بيكي لما تكوني رايقة ومبسوطة يا أماني! ضحكتكِ وجمال مودكِ هما المكسب الحقيقي اللي بيخلي يومي كله ينور. يدوم عليكي التألق ده، ويارب أكون دايماً السبب الأول في سرورك.",
+                            action: "احتفال صغير بالروقان الاستثنائي ده + فسحة جميلة نطلع فيها طاقة الفرح دي سوا 🎉✨",
+                            waMsg: "أنا رايقة ومبسوطة أووووي وبحبك بزيادة النهارده يا عبد الرحمن.. شاركني الفرحة ✨❤️"
+                        },
+                        {
+                            msg: "مودك الرايق ده بيعكس حلاوة قلبك ونقاء روحك يا أمونتي. أنا بعشق اللحظات اللي بشوفك فيها طايرة من الفرحة، ولهمتي إني أحافظ على الابتسامة دي مشتعلة دايماً على وشك الجميل.",
+                            action: "تسجيل ذكرى حلوة جديدة مع جولة تصوير رايقة نخلد فيها ابتسامتكِ دي 📸💕",
+                            waMsg: "طاقة الحب والسعادة عندي عالية جداً يا عبد الرحمن.. تعال نخرج ونعيش اليوم ده بحلاوته ✨👑"
+                        },
+                        {
+                            msg: "السعادة بتليق بيكي جداً يا أميرتي أماني.. كأنكِ اتخلقتي عشان تبتسمي وتنوري الدنيا حواليكي. كملي روقان، وتأكدي إن قلبي كله حارس ومتيم بالسعادة دي.",
+                            action: "دلع إضافي ومفاجأة لطيفة تكمل جمال مودك النهارده لآخر الدقيقة 🎁❤️",
+                            waMsg: "مبسوطة ومرتاحة وحبيت أقولك إنك جزء كبير من سعادتي النهارده يا عبد الرحمن ✨💖"
+                        }
+                    ]
+                },
+
+                confused: {
+                    icon: '🤯',
+                    title: 'مشتتة ومحتارة يا أماني 🌊',
+                    tagline: 'خدي نفس عميق.. أنا ظهرك وسندك المضمون',
+                    glow1: 'bg-teal-600',
+                    glow2: 'bg-emerald-900',
+                    messages: [
+                        {
+                            msg: "طبيعي جداً يمر عليكي أوقات تكوني متلخبطة ومش فاهمة مشاعرك بدقة يا أمونتي.. مش لازم تفسري كل حاجة دلوقتي. ارمي التفكير الشاق، وسيبيني أكون السند الثابت والمساحة الآمنة اللي بتلجأي ليها بدون تردد.",
+                            action: "جلسة فضفضة هادية بدون أي ضغط أو نصايح ثقيلة.. مجرد أسمعك بقلبي وأشيل عنك 🎧💙",
+                            waMsg: "دماغي متشتتة ومحتاجة أحس بالأمان والدفء جنبك يا عبد الرحمن.. تعال اسمعني 🤯❤️"
+                        },
+                        {
+                            msg: "لو الأفكار كتيرة ومكركبة في دماغك يا أماني، حطي إيدك في إيدي وخدي نفس عميق. مفيش حاجة صعبة أو معقدة طالما إحنا سوا، وأنا هفضل جنبك لغاية ما الرؤية تصفى وتطمني تماماً.",
+                            action: "فصلان تام عن أي مؤثرات خارجية + تمشية هادية مع مشروبك المفضل لصفاء الذهن ☕🌿",
+                            waMsg: "محتارة ومشتتة يا عبد الرحمن.. تعال خدني في منطقة أمان وهدوء معاك 🤯💕"
+                        },
+                        {
+                            msg: "مش مطلوب منك تكوني قوية أو فاهمة كل حاجة طول الوقت يا أمونتي. من حقك تضعفي وتتلخبطي، وأنا وظيفتي أحتوي اللخبطة دي بكل صبر وحب ولين. اهدئي خالص يا أميرتي.",
+                            action: "توفير جو هادئ ومطمئن بالكامل مع سماعك بكل اهتمام وتفهم راقي 👑🤍",
+                            waMsg: "أنا تلخبطت وعايزة أحس إنك السند اللي متسندة عليه بجد دلوقتي يا عبد الرحمن 🤯❤️"
+                        }
+                    ]
+                },
+
+                laugh: {
+                    icon: '😂',
+                    title: 'عايزة تضحكي وتفرفشي يا أمونتي 🎭',
+                    tagline: 'جاهزة لألطف إفيهات ومواقف تسعدكِ؟',
+                    glow1: 'bg-orange-600',
+                    glow2: 'bg-amber-600',
+                    messages: [
+                        {
+                            msg: "أنا مستعد أكون أرخص كوميديان في المجرة عشان بس أشوف ضحكتكِ المجلجلة دي يا أماني! ضحككِ بالنسبة لي قضية استراتيجية، ومستعد أرمي كل إفيهاتي ومواقفي الغريبة عشان تفرفشي وتنسي أي هموم.",
+                            action: "رسالة صوتية خصيصاً ليكي بإفيهات ومواقف تفركشك ضحك من الأعماق 🎬😂",
+                            waMsg: "عايزة أضحك وأفرفش جداً يا عبد الرحمن.. سمعني إفيه يغير مودي فوراً 😂❤️"
+                        },
+                        {
+                            msg: "لما تطلبي الفرفشة يا أماني، يبقى وصلتي للمكان الصح! جهزي نفسكِ لجرعة ضحك ومواقف طريفة من بتوعنا المفضلين.. الضحكة دي هي اللي بتظبط ديكور الدنيا كلها بالنسبة لي.",
+                            action: "مشاركة أكتر 3 فيديوهات ومواقف كوميدية خاصة بينا بتفطسنا ضحك 🎭✨",
+                            waMsg: "المود عايز ضحك وفرفشة بدلع يا عبد الرحمن.. وريني شطارتك في الكوميديا 😂💖"
+                        },
+                        {
+                            msg: "يا سلام لما مود الفرفشة يشتغل عندك يا أمونتي! ده بيبقى أحلى عيد بالنسبة لي. يلا بينا نلغي أي جدية أو نكد، ونفتح الباب للضحك والهزار الرايق اللي يليق بقلبك الخفيف الفرفوش.",
+                            action: "لعبة طريفة أو ألعاب نكت سريعة تحدي مين يضحك الأول 🏆😂",
+                            waMsg: "جاهزة أضحك يا عبد الرحمن.. طلع بقى الإفيهات المدفونة عندك بسرعة 😂👑"
+                        }
+                    ]
+                }
+            };
+
+            /* Mood Selection Logic */
+            let currentMood = null;
+            let currentMsgIdx = 0;
+
+            const moodCards = document.querySelectorAll('.mood-card');
+            const resPanel = document.getElementById('responsePanel');
+            const nextMsgBtn = document.getElementById('nextMsgBtn');
+            const glow1 = document.getElementById('glow1');
+            const glow2 = document.getElementById('glow2');
+
+            function updateDisplay() {
+                if (!currentMood) return;
+                const data = moodsData[currentMood];
+                const msgData = data.messages[currentMsgIdx];
+
+                document.getElementById('resIcon').textContent = data.icon;
+                document.getElementById('resTitle').textContent = data.title;
+                document.getElementById('resTagline').textContent = data.tagline;
+                document.getElementById('resMessage').textContent = msgData.msg;
+                document.getElementById('resAction').textContent = msgData.action;
+                document.getElementById('msgIndexTag').textContent = `${currentMsgIdx + 1} من ${data.messages.length}`;
+
+                // WhatsApp Direct Pre-filled Link
+                const waEncoded = encodeURIComponent(msgData.waMsg);
+                document.getElementById('waLink').href = `https://wa.me/${PHONE_NUMBER}?text=${waEncoded}`;
+
+                // Reveal Panel - Force Display Block and Add Fade Animation
+                resPanel.classList.remove('hidden-panel');
+                resPanel.classList.add('fade-in-panel');
+                
+                // Ensure it scrolls into view smoothly
+                setTimeout(() => {
+                    resPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 50);
+            }
+
+            moodCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const mood = card.getAttribute('data-mood');
+                    currentMood = mood;
+                    currentMsgIdx = 0;
+
+                    // Active border glow
+                    moodCards.forEach(c => c.classList.remove('glass-card-selected'));
+                    card.classList.add('glass-card-selected');
+
+                    // Shift Orbs
+                    const data = moodsData[mood];
+                    glow1.className = `glow-bg top-[-50px] right-[-50px] w-80 h-80 ${data.glow1}`;
+                    glow2.className = `glow-bg bottom-[-50px] left-[-50px] w-80 h-80 ${data.glow2}`;
+
+                    updateDisplay();
+                });
+            });
+
+            nextMsgBtn.addEventListener('click', () => {
+                if (!currentMood) return;
+                const total = moodsData[currentMood].messages.length;
+                currentMsgIdx = (currentMsgIdx + 1) % total;
+                updateDisplay();
+            });
+
+        });
+    </script>
+</body>
+</html>
+"""
+
+# Save fixed version
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_v6)
+
+with open("index-v6.html", "w", encoding="utf-8") as f:
+    f.write(html_v6)
+
+print("Fixed display panel functionality successfully!")
